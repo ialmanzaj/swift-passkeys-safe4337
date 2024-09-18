@@ -6,17 +6,18 @@
 //
 
 import SwiftUI
+import swift4337
 
 struct ContentView: View {
+    @EnvironmentObject var swift4337Manager: Swift4337Manager
+
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
-        }
-        .padding()
-    }
+           if swift4337Manager.isInitialized, let account = swift4337Manager.smartAccount {
+               Text("Smart Account Address: \(account.address)")
+           } else {
+               ProgressView("Initializing Smart Account...")
+           }
+       }
 }
 
 #Preview {

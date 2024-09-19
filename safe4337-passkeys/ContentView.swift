@@ -9,15 +9,28 @@ import SwiftUI
 import swift4337
 
 struct ContentView: View {
-    @EnvironmentObject var swift4337Manager: Swift4337Manager
+    @EnvironmentObject var passkeyManager: PasskeyManager
 
     var body: some View {
-           if swift4337Manager.isInitialized, let account = swift4337Manager.smartAccount {
-               Text("Smart Account Address: \(account.address)")
-           } else {
-               ProgressView("Initializing Smart Account...")
-           }
-       }
+            VStack {
+                if passkeyManager.isLoading {
+                    ProgressView()
+                } else if let error = passkeyManager.error {
+                    Text("Error: \(error)")
+                        .foregroundColor(.red)
+                } else if passkeyManager.smartAccount != nil {
+                    Text("Smart Account Set Up")
+                    Button("Send Transaction") {
+                        Task {
+                            await passkeyManager.sendTransaction()
+                        }
+                    }
+                } else {
+                    Text("Smart Account Not Set Up")
+                }
+            }
+            .padding()
+        }
 }
 
 #Preview {
